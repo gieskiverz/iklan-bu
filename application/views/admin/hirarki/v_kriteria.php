@@ -42,7 +42,7 @@
 				<td width="10%"><?=$no;?></td>
 				<td width="60%"><?=$row->nama_kriteria;?></td>
 				<td>
-					<a title="Parameter Kriteria" href="<?php echo base_url('kriteria/subkriteria/'.$row->kriteria_id);?>" class="btn btn-xs btn-success"><i class="fa fa-level-down"></i> Parameter</a>
+					<a title="Parameter Kriteria" href="<?php echo base_url('ahp/subkriteria/'.$row->kriteria_id);?>" class="btn btn-xs btn-success"><i class="fa fa-level-down"></i> Parameter</a>
 					<a title="Edit Kriteria" href="<?php echo site_url('ahp/editKriteria/'.$row->kriteria_id);?>" class="btn btn-xs btn-info"><i class="fa fa-edit"></i> Edit</a>
 					<a onclick="return confirm('Yakin ingin menghapus?');" href="<?php echo site_url('ahp/deleteKriteria/'.$row->kriteria_id);?>" class="btn btn-xs btn-danger">Delete</a>
 				</td>

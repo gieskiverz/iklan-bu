@@ -21,7 +21,7 @@
   <!-- <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table.min.css"> -->
 
   <link href="<?= base_url('assets/'); ?>vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
+  <script src="<?= base_url('assets/'); ?>vendor/jquery/jquery.min.js"></script>
 </head>
 
 <body id="page-top">

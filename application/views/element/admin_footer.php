@@ -41,7 +41,7 @@
   <script src="<?= base_url('assets/'); ?>sweetAlert/sweetalert2.all.min.js"></script>
   
   <!-- Bootstrap core JavaScript-->
-  <script src="<?= base_url('assets/'); ?>vendor/jquery/jquery.min.js"></script>
+  
 
   <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="crossorigin="anonymous"></script>
 

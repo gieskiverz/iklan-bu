@@ -7,6 +7,7 @@ class Ahp extends CI_Controller {
 	{
 		parent::__construct();
         $this->load->model('model_tipe');
+        $this->load->model('Nilai_model');
         $this->load->model('Modelapp');
         $this->load->library('m_db');
         $this->load->model('M_tujuan','mod_bea');
@@ -183,9 +184,10 @@ class Ahp extends CI_Controller {
             }
     }
     
-    public function subKriteria()
+    public function subKriteria($id)
     {
-        $kriteria=$this->input->get('kriteria');
+        check_not_login();
+        $kriteria=$id;
         $s=array();
         $nama="";
         if(!empty($kriteria))
@@ -196,19 +198,20 @@ class Ahp extends CI_Controller {
 			$exnama=field_value('kriteria','kriteria_id',$kriteria,'nama_kriteria');
 			$nama=" ".$exnama;
         }
-        $s['data']=$this->mod_kriteria->subkriteria_data($s);
-        $s['kriteria']=$kriteria?"?kriteria=".$kriteria:"";
-
+        
 		$data=array(
             'title'=>'Admin Panel',
             'judul'=>'Parameter',
         );
-		$data['admin'] = $this->db->get_where('admin', ['email' => $this->session->userdata('email')])->row_array();
 
-		$this->load->view('element/admin_header', $data,$s,$kriteria);
-		$this->load->view('element/admin_sidebar', $data,$s,$kriteria);
-		$this->load->view('element/admin_topbar', $data,$s,$kriteria);
-		$this->load->view('admin/hirarki/v_subKriteria', $data,$s,$kriteria);
+        $data['datas']=$this->mod_kriteria->subkriteria_data($s);
+        $data['kriteria']=$kriteria?"?kriteria=".$kriteria:"";
+        
+        $data['admin'] = $this->db->get_where('admin', ['email' => $this->session->userdata('email')])->row_array();
+		$this->load->view('element/admin_header', $data);
+		$this->load->view('element/admin_sidebar', $data);
+		$this->load->view('element/admin_topbar', $data);
+		$this->load->view('admin/hirarki/v_subKriteria', $data);
 		$this->load->view('element/admin_footer');
     }
     
@@ -218,6 +221,8 @@ class Ahp extends CI_Controller {
             'title'=>'Admin Panel',
             'judul'=>'Parameter',
         );
+        $data['kriteria'] = $this->input->get('kriteria');
+        $data['nilai'] = $this->Nilai_model->getAll();
 		$data['admin'] = $this->db->get_where('admin', ['email' => $this->session->userdata('email')])->row_array();
 
 		$this->load->view('element/admin_header', $data);
@@ -229,39 +234,14 @@ class Ahp extends CI_Controller {
 
     public function prosestambahsubKriteria()
     { 
-        // $data = array (
-           
-        //     'ref' => $this->input->get('kriteria'),
-		// 	'link' => $ref?"?kriteria=".$ref:"",
-        //     'kriteriaid' => $this->input->post('kriteriaid'),
-        //     'nilaiid' => $this->input->post('nilaiid'),
-        //     'tipe' => $this->input->post('tipe'),
-        //     'max' => $this->input->post('max'),
-        //     'opmax' => $this->input->post('opmax'),
-        //     'min' => $this->input->post('min'),
-        //     'opmin' => $this->input->post('opmin'),
-        //     'ket' => $this->input->post('ket'),
-
-        // );
-        
-        // $this->modelapp->insertData('subkriteria',$data); //akses model untuk menyimpan ke database   
        
-        // if($data >= 1) {
-        //         $this->session->set_flashdata("pesan", "<div class=\"col-md-12\"><div class=\"alert alert-success\">Data Berhasil Ditambahkan </div></div>");
-        //         redirect('ahp/subKriteria'); //jika berhasil maka akan ditampilkan view vupload
-        //     }else{
-
-        //         //pesan yang muncul jika terdapat error dimasukkan pada session flashdata
-        //         $this->session->set_flashdata("pesan", "<div class=\"col-md-12\"><div class=\"alert alert-danger\">Gagal Tambah coba lagi !</div></div>");
-        //         redirect('ahp/addSubKriteria'); //jika gagal maka akan ditampilkan form upload
-        //     }
-        $this->form_validation->set_rules('kriteriaid','Kriteria Utama','required');
-		$this->form_validation->set_rules('nilaiid','Tipe','required');
+        $this->form_validation->set_rules('nilaiid','Nilai','required');
+		$this->form_validation->set_rules('tipe','Tipe','required');
 		if($this->form_validation->run()==TRUE)
 		{
 			$ref=$this->input->get('kriteria');
-			$link=$ref?"?kriteria=".$ref:"";
-			$kriteriaid=$this->input->post('kriteriaid');
+			$link=$ref?"/".$ref:"";
+			$kriteriaid=$ref;
 			$nilaiid=$this->input->post('nilaiid');
 			$tipe=$this->input->post('tipe');			
 			$max=$this->input->post('max');
@@ -276,7 +256,8 @@ class Ahp extends CI_Controller {
 				$isi=$ket;
 			}elseif($tipe=="nilai"){
 				$isi=$max;
-			}
+            }
+            
 			if($this->mod_kriteria->subkriteria_add($tipe,$kriteriaid,$opmax,$isi,$opmin,$min,$nilaiid)==TRUE)
 			{
 				$this->session->set_flashdata("pesan", "<div class=\"col-md-12\"><div class=\"alert alert-success\">Data Berhasil Ditambahkan </div></div>");
@@ -302,13 +283,15 @@ class Ahp extends CI_Controller {
 		}
 	}
 
-    public function editsubKriteria()
+    public function editsubKriteria($id)
     {
         $data=array(
             'title'=>'Admin Panel',
             'judul'=>'Edit Data',
             'edit_kriteria'=>$this->modelapp->getEditKriteria(),
         );
+        $data['data']   = $this->db->get_where('subkriteria', ['subkriteria_id' => $id])->row(); 
+        $data['nilai'] = $this->Nilai_model->getAll();
         $data['admin'] = $this->db->get_where('admin', ['email' => $this->session->userdata('email')])->row_array();
 
         $this->load->view('element/admin_header', $data);
@@ -320,23 +303,36 @@ class Ahp extends CI_Controller {
 
     public function proseseditsubKriteria()
     {
-        $id['kriteria_id'] = $this->input->post('kriteria_id');
-        $data = array(                         
-            'kriteria_id' => $this->input->post('kriteria_id'),
-            'nama_kriteria' => $this->input->post('nama_kriteria'),
-        );
+        $ref=$this->input->get('kriteria');
+        $kriteriaid = $ref;
+        $link=$ref?"/".$ref:"";
+        $id = $this->input->post('subkriteria_id');
+        $link2=$id?"/".$id:"";
+        $nilaiid = $this->input->post('nilaiid');
+        $tipe = $this->input->post('tipe');			
+        $max = $this->input->post('max');
+        $opmax = $this->input->post('opmax');
+        $min = $this->input->post('min');
+        $opmin = $this->input->post('opmin');
+        $ket = $this->input->post('ket');
+        
+        $isi='';
+        if($tipe=="teks")
+        {
+            $isi=$ket;
+        }elseif($tipe=="nilai"){
+            $isi=$max;
+        }
+        
+        if($this->mod_kriteria->subkriteria_edit($id,$tipe,$kriteriaid,$opmax,$isi,$opmin,$min,$nilaiid)==TRUE)
+        {
+            $this->session->set_flashdata("pesan", "<div class=\"col-md-12\"><div class=\"alert alert-success\">Data Berhasil Diedit </div></div>");
+            redirect(base_url('ahp/subKriteria').$link);
+        }else{
+            $this->session->set_flashdata("pesan", "<div class=\"col-md-12\"><div class=\"alert alert-danger\">Gagal Edit silahkan coba lagi !</div></div>");
+            redirect(base_url('ahp/editSubKriteria').$link2);
+        }
 
-        $this->modelapp->updateData('kriteria',$data,$id); //akses model untuk menyimpan ke database
-
-        if($data >= 1) {
-                $this->session->set_flashdata("pesan", "<div class=\"col-md-12\"><div class=\"alert alert-success\">Data Berhasil Diupdate </div></div>");
-                redirect('ahp/kriteria'); //jika berhasil maka akan ditampilkan view Data Mentor
-            }else{
-
-                //pesan yang muncul jika terdapat error dimasukkan pada session flashdata
-                $this->session->set_flashdata("pesan", "<div class=\"col-md-12\"><div class=\"alert alert-danger\">Gagal Update coba lagi !</div></div>");
-                redirect('ahp/editKriteria'); //jika gagal maka akan ditampilkan form upload
-            }
     }
     
 	public function delete()
@@ -355,6 +351,16 @@ class Ahp extends CI_Controller {
 
         $this->session->set_flashdata("pesan", "<div class=\"col-md-12\"><div class=\"alert alert-danger\">Data Berhasil Dihapus !!</div></div>");
         redirect('ahp/kriteria');
+    }
+    
+    public function deleteSubkriteria()
+	{
+        $kriteria = $this->uri->segment(3);
+        $id['subkriteria_id'] = $this->uri->segment(4);
+        $this->modelapp->deleteData('subkriteria',$id);
+
+        $this->session->set_flashdata("pesan", "<div class=\"col-md-12\"><div class=\"alert alert-danger\">Data Berhasil Dihapus !!</div></div>");
+        redirect('ahp/subKriteria/'.$kriteria);
 	}
 
 	function proses()

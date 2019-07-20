@@ -1,3 +1,8 @@
+<style>
+.radio-inline{
+    margin-right:2%;
+}
+</style>
 <script type="text/javascript">
 $(document).ready(function () {
 	$(".opsi input").removeAttr('required');
@@ -23,18 +28,17 @@ $(document).ready(function () {
 
     <?php
     echo validation_errors();
-    echo form_open(base_url('ahp/addSubKriteria').$link,array('class'=>'form-horizontal'));
+    echo form_open(base_url('ahp/prosestambahsubKriteria?kriteria=').$kriteria,array('class'=>'form-horizontal'));
     ?>  
         <div class="form-group required">
             <label class="col-sm-2 control-label" for="">Tipe</label>
             <div class="col-md-6">
                 <?php
                 $tipe=array('teks','nilai');
-                echo com_choice('radio','tipe',$tipe,'teks',array('class'=>'tipe'),TRUE,TRUE);
+                echo com_choice('radio','tipe',$tipe,'teks',array('class'=>'tipe '),TRUE,TRUE);
                 ?>
             </div>
         </div>
-        <input type="hidden" name="kriteriaid" value="<?=$kriteria;?>"/>
         <div id="div_teks" class="opsi">
             <div class="form-group required">
                 <label class="col-sm-2 control-label" for="">Keterangan</label>
@@ -78,7 +82,7 @@ $(document).ready(function () {
                         </select>
                     </div>
                     <div class="col-sm-8" style="margin: 0;padding=0">
-                        <input type="number" name="max" id="" class="form-control " autocomplete="" placeholder="Nilai Minimum" required="" value="<?php echo set_value('max'); ?>"/>
+                        <input type="number" name="max" id="" class="form-control " autocomplete="" placeholder="Nilai Maximum" required="" value="<?php echo set_value('max'); ?>"/>
                     </div>
                     </div>
                 </div>

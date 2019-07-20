@@ -9,8 +9,8 @@ $(document).ready(function () {
       "searching": true,
       "ordering": true,
       "info": true,
-      "autoWidth": false
-      "order": [[ 1, "asc" ]],
+      "autoWidth": false,
+      "order": [[ 1, asc ]],
         "oLanguage": {
             "sProcessing": '<i class="fa fa-spinner fa-pulse fa-3x"></i>'
       },
@@ -24,7 +24,7 @@ $(document).ready(function () {
     <h1 class="h3 mb-4 text-gray-800"><?= $judul; ?></h1>
 
     <div>
-        <a href="<?=base_url('ahp/addSubKriteria');?>" class="btn btn-primary btn-md">Tambah Parameter</a>
+        <a href="<?=base_url('ahp/addSubKriteria').$kriteria;?>" class="btn btn-primary btn-md">Tambah Parameter</a>
     </div>
     <p>&nbsp;</p>
     <table class="table table-border table-hover" id="datatable">
@@ -35,11 +35,11 @@ $(document).ready(function () {
         </thead>
         <tbody>
             <?php
-            if(!empty($data))
+            if(!empty($datas))
             {
-                foreach($data as $row)
+                foreach($datas as $row)
                 {
-                    $link=str_replace("?","&",$kriteria);
+                    $link=$kriteria;
                     $id=$row->subkriteria_id;
                     $namaUtama=field_value('kriteria','kriteria_id',$row->kriteria_id,'nama_kriteria');
                     $nilainama="(".$row->nilai_id.") ".field_value('nilai_kategori','nilai_id',$row->nilai_id,'nama_nilai');
@@ -48,8 +48,8 @@ $(document).ready(function () {
                     <td><?=$namaUtama." ".$row->nama_subkriteria;?></td>
                     <td><?=$nilainama;?></td>
                     <td>
-                        <a href="<?=base_url(akses().'/master/kriteria/subkriteriaedit').'?id='.$id.$link;?>" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
-                                <a onclick="return confirm('Yakin ingin menghapus data ini?');" href="<?=base_url(akses().'/master/kriteria/subkriteriadelete');?>?id=<?=$id.$link;?>" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                        <a title="Edit Subkriteria" href="<?php echo site_url('ahp/editSubkriteria/'.$row->subkriteria_id);?>" class="btn btn-xs btn-info"><i class="fa fa-edit"></i> Edit</a>
+                        <a onclick="return confirm('Yakin ingin menghapus?');" href="<?php echo site_url('ahp/deleteSubkriteria/'.$row->kriteria_id.'/'.$row->subkriteria_id);?>" class="btn btn-xs btn-danger">Delete</a>
                     </td>
                 </tr>
                 <?php
