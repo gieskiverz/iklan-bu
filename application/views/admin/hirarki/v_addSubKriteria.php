@@ -116,7 +116,7 @@ $(document).ready(function () {
             <label class="col-sm-2 control-label">&nbsp;</label>
             <div class="col-md-6">
                 <button type="submit" class="btn btn-primary btn-flat">Tambah</button>
-                <a href="" class="btn btn-default btn-flat">Batal</a>
+                <a href="<?php echo base_url('ahp/subKriteria/').$kriteria ?>" class="btn btn-default btn-flat">Batal</a>
             </div>
         </div>
         <?php

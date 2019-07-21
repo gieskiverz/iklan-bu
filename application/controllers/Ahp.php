@@ -8,9 +8,11 @@ class Ahp extends CI_Controller {
 		parent::__construct();
         $this->load->model('model_tipe');
         $this->load->model('Nilai_model');
+        $this->load->model('Kriteria_model');
         $this->load->model('Modelapp');
         $this->load->library('m_db');
         $this->load->model('M_tujuan','mod_bea');
+        $this->load->model('Daftar_tujuan_model');
 		$this->load->model('M_kriteria','mod_kriteria');
 	}
 	public function index()
@@ -390,4 +392,176 @@ class Ahp extends CI_Controller {
 		}		
     }
     
+    public function DaftarTujuan()
+    {
+        check_not_login();
+        
+		$data=array(
+            'title'=>'Admin Panel',
+            'judul'=>'Daftar Tujuan',
+        );
+        $data['datas'] = $this->Daftar_tujuan_model->getAllBy([]);
+        $data['admin'] = $this->db->get_where('admin', ['email' => $this->session->userdata('email')])->row_array();
+		$this->load->view('element/admin_header', $data);
+		$this->load->view('element/admin_sidebar', $data);
+		$this->load->view('element/admin_topbar', $data);
+		$this->load->view('admin/hirarki/v_daftarTujuan', $data);
+		$this->load->view('element/admin_footer');
+    }
+
+    public function addDaftarTujuan()
+    {
+		$data=array(
+            'title'=>'Admin Panel',
+            'judul'=>'Tambah Daftar Tujuan',
+        );
+        $data['kriteria'] = $this->db->get('kriteria')->result();
+        $data['tujuan'] = $this->db->get('tujuan')->result();
+		$data['admin'] = $this->db->get_where('admin', ['email' => $this->session->userdata('email')])->row_array();
+
+		$this->load->view('element/admin_header', $data);
+		$this->load->view('element/admin_sidebar', $data);
+		$this->load->view('element/admin_topbar', $data);
+		$this->load->view('admin/hirarki/v_addDaftarTujuan', $data);
+		$this->load->view('element/admin_footer');
+    }
+    public function get_ruas()
+    {
+        $tujuan = $this->input->get('tujuan');
+        $tujuan_active = $this->input->get('tujuan_active');
+        if(!empty($tujuan))
+		{
+			$where=array(
+			'tujuan_id'=>$tujuan,
+            );
+            
+			$daftar_tujuan = $this->Daftar_tujuan_model->getAllBy($where);
+			if(!empty($daftar_tujuan))
+			{
+                $list=[];
+				foreach($daftar_tujuan as $dt)
+				{
+                    if ($tujuan_active != $dt->jalan_id) {
+                        $list[] = $dt->jalan_id;
+                    }
+                }
+
+                $where=$list;  
+                $not_in = $this->Daftar_tujuan_model->getAllJalanNotIn($where);
+				echo json_encode($not_in);
+			}else{
+				$d=$this->Daftar_tujuan_model->getAllJalan([]);
+				echo json_encode($d);
+			}
+		}else{
+			echo json_encode(array());
+		}
+    }
+
+    public function prosestambahDaftarTujuan()
+    { 
+       
+        $this->form_validation->set_rules('tujuan','Tujuan','required');
+		$this->form_validation->set_rules('ruas','Ruas','required');
+		if($this->form_validation->run()==TRUE)
+		{
+            $data= [
+                "tujuan_id" => $this->input->post('tujuan'),
+                "jalan_id" => $this->input->post('ruas'),
+                "status" => "daftar",
+                "total" => 0
+            ];
+            $insert = $this->Daftar_tujuan_model->insert($data);
+            if ($insert) {
+                $data_nilai = [];
+                $kriteria_post = $this->input->post('kriteria');
+                $kriteria = $this->Kriteria_model->kriteria_data([]);
+                foreach ($kriteria as $k) {
+                    $data_nilai = [
+                       "daftar_tujuan_id" => $insert,
+                       "kriteria_id" => $k->kriteria_id,
+                       "nilai_id" => $kriteria_post[$k->kriteria_id]
+                   ];
+                   $insertNilai = $this->Daftar_tujuan_model->insertNilai($data_nilai);
+                }    
+            }
+            
+			if($insertNilai)
+			{
+				$this->session->set_flashdata("pesan", "<div class=\"col-md-12\"><div class=\"alert alert-success\">Data Berhasil Ditambahkan </div></div>");
+				redirect(base_url('ahp/DaftarTujuan'));
+			}else{
+				$this->session->set_flashdata("pesan", "<div class=\"col-md-12\"><div class=\"alert alert-danger\">Gagal Tambah coba lagi !</div></div>");
+				redirect(base_url('ahp/DaftarTujuan'));
+			}
+		}
+    }
+    
+    public function editDaftarTujuan($id)
+    {
+        $data=array(
+            'title'=>'Admin Panel',
+            'judul'=>'Edit Daftar Tujuan'
+        );
+        $data['kriteria'] = $this->db->get('kriteria')->result();
+        $data['tujuan'] = $this->db->get('tujuan')->result();
+        $data['data']   = $this->db->get_where('daftar_tujuan', ['daftar_tujuan_id' => $id])->row(); 
+        $data['admin'] = $this->db->get_where('admin', ['email' => $this->session->userdata('email')])->row_array();
+
+        $this->load->view('element/admin_header', $data);
+        $this->load->view('element/admin_sidebar', $data);
+        $this->load->view('element/admin_topbar', $data);
+        $this->load->view('admin/hirarki/v_editDaftarTujuan', $data);
+        $this->load->view('element/admin_footer');
+    }
+
+    public function proseseditDaftarTujuan()
+    { 
+       
+        $this->form_validation->set_rules('tujuan','Tujuan','required');
+		$this->form_validation->set_rules('ruas','Ruas','required');
+		if($this->form_validation->run()==TRUE)
+		{
+            $where = ["daftar_tujuan_id" => $this->input->post('id')]; 
+            $data= [
+                "tujuan_id" => $this->input->post('tujuan'),
+                "jalan_id" => $this->input->post('ruas')
+            ];
+            $update = $this->Daftar_tujuan_model->update($data,$where);
+            if ($update) {
+                $this->modelapp->deleteData('daftar_tujuan_nilai',$where);
+                $data_nilai = [];
+                $kriteria_post = $this->input->post('kriteria');
+                $kriteria = $this->Kriteria_model->kriteria_data([]);
+                foreach ($kriteria as $k) {
+                    $data_nilai = [
+                       "daftar_tujuan_id" => $this->input->post('id'),
+                       "kriteria_id" => $k->kriteria_id,
+                       "nilai_id" => $kriteria_post[$k->kriteria_id]
+                   ];
+                   $insertNilai = $this->Daftar_tujuan_model->insertNilai($data_nilai);
+                }    
+            }
+            
+			if($insertNilai)
+			{
+				$this->session->set_flashdata("pesan", "<div class=\"col-md-12\"><div class=\"alert alert-success\">Data Berhasil Ditambahkan </div></div>");
+				redirect(base_url('ahp/DaftarTujuan'));
+			}else{
+				$this->session->set_flashdata("pesan", "<div class=\"col-md-12\"><div class=\"alert alert-danger\">Gagal Tambah coba lagi !</div></div>");
+				redirect(base_url('ahp/DaftarTujuan'));
+			}
+		}
+    }
+
+    public function deleteDaftarTujuan()
+	{
+        $id['daftar_tujuan_id'] = $this->uri->segment(3);
+        $this->modelapp->deleteData('daftar_tujuan',$id);
+       
+        $this->modelapp->deleteData('daftar_tujuan_nilai',$id);
+
+        $this->session->set_flashdata("pesan", "<div class=\"col-md-12\"><div class=\"alert alert-danger\">Data Berhasil Dihapus !!</div></div>");
+        redirect('ahp/DaftarTujuan');
+	}
 }

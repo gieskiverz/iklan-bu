@@ -24,32 +24,30 @@ $(document).ready(function () {
     <h1 class="h3 mb-4 text-gray-800"><?= $judul; ?></h1>
      <br><?php echo $this->session->flashdata('pesan');?> 
     <div>
-        <a href="<?=base_url('ahp/addSubKriteria').$kriteria;?>" class="btn btn-primary btn-md">Tambah Parameter</a>
+        <a href="<?=base_url('ahp/addDaftarTujuan');?>" class="btn btn-primary btn-md">Tambah Daftar Tujuan</a>
     </div>
     <p>&nbsp;</p>
     <table class="table table-border table-hover" id="datatable">
         <thead>
-            <th>Sub Kriteria</th>
-            <th>Nilai</th>
+            <th>Tujuan</th>
+            <th>Nama Ruas</th>
+            <th>Status</th>
             <th></th>
         </thead>
         <tbody>
-            <?php
+          <?php
             if(!empty($datas))
             {
                 foreach($datas as $row)
                 {
-                    $link=$kriteria;
-                    $id=$row->subkriteria_id;
-                    $namaUtama=field_value('kriteria','kriteria_id',$row->kriteria_id,'nama_kriteria');
-                    $nilainama="(".$row->nilai_id.") ".field_value('nilai_kategori','nilai_id',$row->nilai_id,'nama_nilai');
                 ?>
                 <tr>
-                    <td><?=$namaUtama." ".$row->nama_subkriteria;?></td>
-                    <td><?=$nilainama;?></td>
+                    <td><?=$row->judul;?></td>
+                    <td><?=$row->namajalan;?></td>
+                    <td><?=$row->status;?></td>
                     <td>
-                        <a title="Edit Subkriteria" href="<?php echo site_url('ahp/editSubkriteria/'.$row->subkriteria_id);?>" class="btn btn-xs btn-info"><i class="fa fa-edit"></i> Edit</a>
-                        <a onclick="return confirm('Yakin ingin menghapus?');" href="<?php echo site_url('ahp/deleteSubkriteria/'.$row->kriteria_id.'/'.$row->subkriteria_id);?>" class="btn btn-xs btn-danger">Delete</a>
+                        <a title="Edit Subkriteria" href="<?php echo site_url('ahp/editDaftarTujuan/'.$row->daftar_tujuan_id);?>" class="btn btn-xs btn-info"><i class="fa fa-edit"></i> Edit</a>
+                        <a onclick="return confirm('Yakin ingin menghapus?');" href="<?php echo site_url('ahp/deleteDaftarTujuan/'.$row->daftar_tujuan_id);?>" class="btn btn-xs btn-danger">Delete</a>
                     </td>
                 </tr>
                 <?php

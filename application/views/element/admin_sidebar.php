@@ -126,7 +126,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <a class="collapse-item" href="<?php echo base_url('ahp');?>">Semua Tujuan</a>
             <a class="collapse-item" href="<?php echo base_url('ahp/kriteria');?>">Kriteria Tujuan</a>
-            <a class="collapse-item" href="<?php echo base_url('ahp/#');?>">Daftar Tujuan</a>
+            <a class="collapse-item" href="<?php echo base_url('ahp/DaftarTujuan');?>">Daftar Tujuan</a>
           </div>
         </div>
       </li>
