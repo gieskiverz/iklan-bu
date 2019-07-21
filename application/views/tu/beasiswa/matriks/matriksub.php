@@ -53,7 +53,7 @@ $("#formentri").submit(function(e){
 	$.ajax({
 		type:'post',
 		dataType:'json',
-		url:"<?=base_url();?>/beasiswa/kriteria/updatesub",
+		url:"<?=base_url();?>ahp/updatesub",
 		data:$(this).serialize(),
 		error:function(){
 			shownotice('danger','Gagal menyimpan data');
@@ -331,9 +331,12 @@ echo form_open('#',array('class'=>'form-horizontal','id'=>'formentri'));
 					echo '<select name="'.$newname.'" id="k'.$noUtama.'b'.$noSub.'" data-target="k'.$noSub.'b'.$noUtama.'" data-kolom="'.$noSub.'" class="form-control inputnumber kolom'.$noSub.'" title="kolom'.$noSub.'">';
 					for($x=1;$x<=9;$x++)
 					{
-						$nilai=ambil_nilai_subkriteria($tujuan_id,$kriteriaid,$k2,$xxx);
+						// $nilai=ambil_nilai_subkriteria($tujuan_id,$kriteriaid,$k2,$xxx);
+						$wheres =  ['tujuan_id' => $tujuan_id,'subkriteria_id_dari' => $k2,
+                                    'subkriteria_id_tujuan' => $xxx, 'nilai'=>$x];
+                        $nilai=$this->db->get_where('subkriteria_nilai',$wheres)->row(); 
 						$sl='';
-						if($nilai==$x)
+						if($nilai)
 						{
 							$sl='selected="selected"';
 						}

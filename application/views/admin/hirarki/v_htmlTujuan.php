@@ -294,8 +294,8 @@ echo form_open('#',array('class'=>'form-horizontal','id'=>'formentri'));
 					echo '<select name="'.$newname.'" id="k'.$noUtama.'b'.$noSub.'" data-target="k'.$noSub.'b'.$noUtama.'" data-kolom="'.$noSub.'" class="form-control inputnumber kolom'.$noSub.'" title="kolom'.$noSub.'">';
                     for($x=1;$x<=9;$x++)
 					{
-                        $wheres =  ['tujuan_id' => $tujuan_id,'kriteria_id_dari' => $noUtama,
-                                    'kriteria_id_tujuan' => $noSub, 'nilai'=>$x];
+                        $wheres =  ['tujuan_id' => $tujuan_id,'kriteria_id_dari' => $k2,
+                                    'kriteria_id_tujuan' => $xxx, 'nilai'=>$x];
                         $nilai=$this->db->get_where('kriteria_nilai',$wheres)->row();    
 						$sl='';
 						if($nilai)

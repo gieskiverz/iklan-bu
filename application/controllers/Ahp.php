@@ -680,5 +680,63 @@ class Ahp extends CI_Controller {
 			echo json_encode(array('status'=>'no','msg'=>$msg));
 		}
 		
+    }
+    
+    function updatesub()
+    {
+    	$error=FALSE;
+    	$tujuan_id=$this->input->post('tujuan_id');
+    	$kriteriaid=$this->input->post('kriteriaid');
+    	if(!empty($tujuan_id) && !empty($kriteriaid))
+    	{
+			
+		
+    	$msg="";
+    	$s=array(
+    	'tujuan_id'=>$tujuan_id,
+    	'kriteria_id'=>$kriteriaid,
+    	);
+    	$this->m_db->delete_row('subkriteria_nilai',$s);
+    	    	
+    	$cr=$this->input->post('crvalue');
+    	if($cr > 0.01)
+    	{
+    		$msg="Gagal diupdate karena nilai CR kurang dari 0.01";
+			$error=TRUE;
+		}else{
+			foreach($_POST as $k=>$v)
+			{
+				if($k!="crvalue" && $k!="tujuan_id" && $k!="kriteriaid")
+				{									
+				foreach($v as $x=>$x2)
+				{
+					$d=array(
+					'tujuan_id'=>$tujuan_id,
+					'kriteria_id'=>$kriteriaid,
+					'subkriteria_id_dari'=>$k,
+					'subkriteria_id_tujuan'=>$x,
+					'nilai'=>$x2,
+					);
+					$this->m_db->add_row('subkriteria_nilai',$d);
+				}
+				}
+			}
+			$msg="Berhasil update nilai subkriteria";
+			$error=FALSE;
+		}
+    			
+    	
+    	if($error==FALSE)
+    	{			
+			echo json_encode(array('status'=>'ok','msg'=>$msg));
+		}else{
+			echo json_encode(array('status'=>'no','msg'=>$msg));
+		}
+		
+		}else{
+			$msg="Gagal mengubah nilai subkriteria";
+			echo json_encode(array('status'=>'no','msg'=>$msg));
+		}
+		
 	}
 }
