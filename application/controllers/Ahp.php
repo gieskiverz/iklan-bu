@@ -53,6 +53,8 @@ class Ahp extends CI_Controller {
            
             'judul' => $this->input->post('judul'),
             'keterangan' => $this->input->post('keterangan'),
+            'tahun' => $this->input->post('tahun'),
+            'kuota' => $this->input->post('kuota'),
 
         );
         

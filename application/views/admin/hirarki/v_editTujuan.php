@@ -31,6 +31,20 @@
                         </div>
                     </div>
                     <br>
+                    <div class="control-group">
+                        <label class="control-label">Tahun</label>
+                        <div class="controls">
+                            <input class="form-control" type="number" name="tahun" required value="<?php echo $key->tahun; ?>">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="control-group">
+                        <label class="control-label">Kuota</label>
+                        <div class="controls">
+                            <input class="form-control" type="number" name="kuota" required value="<?php echo $key->kuota; ?>">
+                        </div>
+                    </div>
+                    <br>
                     <?php } ?>
                 
                     <a class="btn btn-md btn-danger" href="<?php echo site_url('ahp');?>">Kembali</a>

@@ -20,6 +20,21 @@
                         <textarea name="keterangan" class="form-control"><?=set_value('keterangan');?></textarea>
                     </div>
             </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="">Tahun</label>
+                    <div class="col-md-9">
+                        <input type="number" maxlength=4 name="tahun" id="" class="form-control " autocomplete="" placeholder="Tahun Tujuan" required="" value="<?php echo set_value('tahun'); ?>"/>
+                    </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="">Kuota</label>
+                    <div class="col-md-9">
+                        <input type="number" name="kuota" id="" class="form-control " autocomplete="" placeholder="Kuota" required="" value="<?php echo set_value('kuota'); ?>"/>
+                    </div>
+            </div>
+
             <div class="form-group">
                 <label class="col-sm-2 control-label">&nbsp;</label>
                     <div class="col-md-6">
@@ -34,6 +49,8 @@
 		<thead>
 			<th>Judul</th>
 			<th>Keterangan</th>
+			<th>Tahun</th>
+			<th>Kuota</th>
 			<th></th>
 		</thead>
 		<tbody>
@@ -47,6 +64,8 @@
 				<tr>
 					<td><?=$row->judul;?></td>				
 					<td><?=$row->keterangan;?></td>
+					<td><?=$row->tahun;?></td>
+					<td><?=$row->kuota;?></td>
 					<td>
 						<a href="" class="btn btn-xs btn-success">Kandidat</a> 
 						<a title="Edit Kriteria" href="<?php echo site_url('ahp/editTujuan/'.$row->id_tujuan);?>" class="btn btn-xs btn-info"><i class="fa fa-edit"></i> Edit</a>
