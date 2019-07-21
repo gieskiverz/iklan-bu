@@ -563,5 +563,36 @@ class Ahp extends CI_Controller {
 
         $this->session->set_flashdata("pesan", "<div class=\"col-md-12\"><div class=\"alert alert-danger\">Data Berhasil Dihapus !!</div></div>");
         redirect('ahp/DaftarTujuan');
+    }
+    
+    public function kriteriaTujuan()
+    {
+       $data=array(
+            'title'=>'Admin Panel',
+            'judul'=>'Kriteria Tujuan',
+        );
+        $data['kriteria'] = $this->db->get('kriteria')->result();
+        $data['tujuan'] = $this->db->get('tujuan')->result();
+		$data['admin'] = $this->db->get_where('admin', ['email' => $this->session->userdata('email')])->row_array();
+
+		$this->load->view('element/admin_header', $data);
+		$this->load->view('element/admin_sidebar', $data);
+		$this->load->view('element/admin_topbar', $data);
+		$this->load->view('admin/hirarki/v_kriteriaTujuan', $data);
+		$this->load->view('element/admin_footer');
+    }
+
+    function gethtml()
+    {
+    	$id=$this->input->get('tujuan');
+		$output=array();
+        $dKriteria= $this->db->get('kriteria')->result();;
+		foreach($dKriteria as $rK)
+		{
+			$output[$rK->kriteria_id]=$rK->nama_kriteria;
+        }	
+    	$d['arr']=$output;
+    	$d['tujuan_id']=$id;
+     	$this->load->view('admin/hirarki/v_htmlTujuan',$d);
 	}
 }
