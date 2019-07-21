@@ -36,7 +36,6 @@
         <label class="col-sm-2 control-label">&nbsp;</label>
         <div class="col-md-10 text-right">
             <button type="submit" class="btn btn-primary btn-flat">Search</button>
-            <a href="<?php echo base_url('ahp/kriteriaTujuan') ?>" class="btn btn-default btn-flat">Batal</a>
         </div>
     </div>
     <?php
@@ -72,6 +71,25 @@ $(document).ready(function () {
 			},
 		});
 	});
+
+    function showsubdata(kriteria,tujuan_id)
+    {
+	    $.ajax({
+			type:'get',
+			dataType:'html',
+			url:"<?=base_url('ahp/getsub');?>",
+			data:"kriteria="+kriteria+"&tujuan_id="+tujuan_id,
+			error:function(){
+				$("#matriksub").html('Gagal mengambil data matrik');
+			},
+			beforeSend:function(){
+				$("#matriksub").html('Mengambil data matrik. Tunggu sebentar');
+			},
+			success:function(x){
+				$("#matriksub").html(x);
+			},
+		});
+    }
 });
 </script>
 

@@ -594,5 +594,91 @@ class Ahp extends CI_Controller {
     	$d['arr']=$output;
     	$d['tujuan_id']=$id;
      	$this->load->view('admin/hirarki/v_htmlTujuan',$d);
+    }
+
+    function getsubcontainer()
+	{
+        $id=$this->input->get('tujuan_id');
+        $d['kriteria'] = $this->db->get('kriteria')->result();
+		$d['tujuan_id']=$id;
+		$this->load->view('tu/beasiswa/matriks/subcontainer',$d);
+    }
+    
+    function getsub()
+	{		
+		$tujuan_id=$this->input->get('tujuan_id');
+		$id=$this->input->get('kriteria');
+    	$namaKriteria=$this->mod_kriteria->kriteria_info($id,'nama_kriteria');
+    	$dSub=$this->mod_kriteria->subkriteria_child($id,'nilai_id ASC');
+    	$output=array();
+    	if(!empty($dSub))
+    	{					
+		foreach($dSub as $rK)
+		{
+			$nama=field_value('nilai_kategori','nilai_id',$rK->nilai_id,'nama_nilai');
+			$output[$rK->subkriteria_id]=$nama;
+		}
+		}
+    	$d['arr']=$output;
+    	$d['kriteriaid']=$id;
+    	$d['tujuan_id']=$tujuan_id;
+    	$d['namakriteria']=$namaKriteria;
+    	$this->load->view('tu/beasiswa/matriks/matriksub',$d);
+    }
+    
+     
+    function updateutama()
+    {
+    	$error=FALSE;
+    	$tujuan_id=$this->input->post('tujuan_id');
+    	if(!empty($tujuan_id))
+    	{
+			
+		
+    	$msg="";
+    	$s=array(
+    	'kriteria_nilai_id !='=>''
+    	);
+    	$this->m_db->delete_row('kriteria_nilai',$s);
+    	    	
+    	$cr=$this->input->post('crvalue');
+    	if($cr > 0.01)
+    	{
+    		$msg="Gagal diupdate karena nilai CR kurang dari 0.01";
+			$error=TRUE;
+		}else{
+			foreach($_POST as $k=>$v)
+			{
+				if($k!="crvalue" && $k!="tujuan_id")
+				{									
+				foreach($v as $x=>$x2)
+				{
+					$d=array(
+					'tujuan_id'=>$tujuan_id,
+					'kriteria_id_dari'=>$k,
+					'kriteria_id_tujuan'=>$x,
+					'nilai'=>$x2,
+					);
+					$this->m_db->add_row('kriteria_nilai',$d);
+				}
+				}
+			}
+			$msg="Berhasil update nilai kriteria";
+			$error=FALSE;
+		}
+    			
+    	
+    	if($error==FALSE)
+    	{			
+			echo json_encode(array('status'=>'ok','msg'=>$msg));
+		}else{
+			echo json_encode(array('status'=>'no','msg'=>$msg));
+		}
+		
+		}else{
+			$msg="Gagal mengubah nilai kriteria";
+			echo json_encode(array('status'=>'no','msg'=>$msg));
+		}
+		
 	}
 }

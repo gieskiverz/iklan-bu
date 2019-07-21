@@ -46,7 +46,7 @@ $("#formentri").submit(function(e){
 	$.ajax({
 		type:'post',
 		dataType:'json',
-		url:"<?=base_url();?>/beasiswa/kriteria/updateutama",
+		url:"<?=base_url();?>ahp/updateutama",
 		data:$(this).serialize(),
 		error:function(){
 			shownotice('danger','Gagal menyimpan data');
@@ -219,6 +219,24 @@ function rk()
 	$("#crvalue").val(fx_cr);
 }
 
+function showsubkriteria()
+{
+	$.ajax({
+			type:'get',
+			dataType:'html',
+			url:"<?=base_url('ahp/getsubcontainer');?>",
+			data:"tujuan_id=<?=$tujuan_id;?>",
+			error:function(){
+				$("#matrik").html('Gagal mengambil data matrik sub kriteria');
+			},
+			beforeSend:function(){
+				$("#matrik").html('Mengambil data matrik sub kriteria. Tunggu sebentar');
+			},
+			success:function(x){
+				$("#matrik").html(x);
+			},
+		});
+}
 </script>
 
 <div id="respon"></div>
@@ -276,12 +294,14 @@ echo form_open('#',array('class'=>'form-horizontal','id'=>'formentri'));
 					echo '<select name="'.$newname.'" id="k'.$noUtama.'b'.$noSub.'" data-target="k'.$noSub.'b'.$noUtama.'" data-kolom="'.$noSub.'" class="form-control inputnumber kolom'.$noSub.'" title="kolom'.$noSub.'">';
                     for($x=1;$x<=9;$x++)
 					{
-						// $nilai=ambil_nilai_kriteria($tujuan_id,$k2,$xxx);
-						// $sl='';
-						// if($nilai==$x)
-						// {
-						// 	$sl='selected="selected"';
-						// }
+                        $wheres =  ['tujuan_id' => $tujuan_id,'kriteria_id_dari' => $noUtama,
+                                    'kriteria_id_tujuan' => $noSub, 'nilai'=>$x];
+                        $nilai=$this->db->get_where('kriteria_nilai',$wheres)->row();    
+						$sl='';
+						if($nilai)
+						{
+							$sl='selected="selected"';
+						}
 						echo '<option value="'.$x.'" '.$sl.'>'.$x.'</option>';
 					}
 					echo '</select>';

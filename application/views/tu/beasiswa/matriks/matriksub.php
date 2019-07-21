@@ -53,7 +53,7 @@ $("#formentri").submit(function(e){
 	$.ajax({
 		type:'post',
 		dataType:'json',
-		url:"<?=base_url(akses());?>/beasiswa/kriteria/updatesub",
+		url:"<?=base_url();?>/beasiswa/kriteria/updatesub",
 		data:$(this).serialize(),
 		error:function(){
 			shownotice('danger','Gagal menyimpan data');
@@ -85,7 +85,7 @@ $("#prioform").submit(function(e){
 	$.ajax({
 		type:'post',
 		dataType:'json',
-		url:"<?=base_url(akses());?>/beasiswa/kriteria/updatesubprioritas",
+		url:"<?=base_url();?>/beasiswa/kriteria/updatesubprioritas",
 		data:$(this).serialize(),
 		error:function(){
 			
@@ -284,7 +284,7 @@ echo form_open('#',array('class'=>'form-horizontal','id'=>'formentri'));
 ?>
 <input type="hidden" name="crvalue" id="crvalue"/>
 <input type="hidden" name="kriteriaid" value="<?=$kriteriaid;?>"/>
-<input type="hidden" name="beasiswaid" value="<?=$beasiswaid;?>"/>
+<input type="hidden" name="tujuan_id" value="<?=$tujuan_id;?>"/>
 <div class="table-responsive">
 <table class="table table-bordered">
 <thead>
@@ -331,7 +331,7 @@ echo form_open('#',array('class'=>'form-horizontal','id'=>'formentri'));
 					echo '<select name="'.$newname.'" id="k'.$noUtama.'b'.$noSub.'" data-target="k'.$noSub.'b'.$noUtama.'" data-kolom="'.$noSub.'" class="form-control inputnumber kolom'.$noSub.'" title="kolom'.$noSub.'">';
 					for($x=1;$x<=9;$x++)
 					{
-						$nilai=ambil_nilai_subkriteria($beasiswaid,$kriteriaid,$k2,$xxx);
+						$nilai=ambil_nilai_subkriteria($tujuan_id,$kriteriaid,$k2,$xxx);
 						$sl='';
 						if($nilai==$x)
 						{
@@ -364,24 +364,21 @@ echo form_open('#',array('class'=>'form-horizontal','id'=>'formentri'));
 </div>
 
 <div class="pull-left">
-	<a href="javascript:;" onclick="hitung();" class="btn btn-primary">Hitung</a> 
 	<a href="javascript:;" onclick="showmatrix();" class="btn btn-info">Lihat Matriks</a>	
-</div>
-<div class="pull-right">
 	<button type="submit" class="btn btn-success">Simpan Kriteria</button>
 </div>
 <?php
 echo form_close();
 ?>
 </div>
-
+<br><br>
 
 <div id="matrikdiv" class="col-md-12" style="display: none">
 
 <div class="table-responsive">
 <?php echo form_open('#',array('id'=>'prioform'));?>
 <input type="hidden" name="kriteriaid" value="<?=$kriteriaid;?>"/>
-<input type="hidden" name="beasiswaid" value="<?=$beasiswaid;?>"/>
+<input type="hidden" name="tujuan_id" value="<?=$tujuan_id;?>"/>
 <table class="table table-bordered">
 <thead>
 	<th colspan="<?=$jumlah+1;?>" class="text-center">Matrik Nilai Kriteria</th>
@@ -431,7 +428,7 @@ echo form_close();
 <div class="table-responsive">
 <table class="table table-bordered">
 <thead>
-	<th colspan="<?=$jumlah+1;?>" class="text-center">Matrik Penjumlahan Tiap Baris</th>
+	<th colspan="<?=$jumlah+2;?>" class="text-center">Matrik Penjumlahan Tiap Baris</th>
 </thead>
 <thead>
 	<th>Kriteria</th>
@@ -553,7 +550,7 @@ echo form_close();
 <?php
 }else{
 ?>
-<div class="alert alert-danger">Parameter belum dibuat. Silahkan buat terlebih dahulu <a href="<?=base_url(akses().'/master/kriteria/subkriteria?kriteria='.$kriteriaid);?>">Di sini</a> </div>
+<div class="alert alert-danger">Parameter belum dibuat. Silahkan buat terlebih dahulu <a href="<?=base_url('subkriteria/'.$kriteriaid);?>">Di sini</a> </div>
 <?php
 }
 ?>
