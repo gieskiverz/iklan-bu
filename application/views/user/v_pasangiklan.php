@@ -1,3 +1,4 @@
+
         <div class="page-head"> 
             <div class="container">
                 <div class="row">
@@ -53,23 +54,28 @@
                                                     echo "<option value=''>Pilih Jenis Iklan</option>";
                                                     foreach ($itemjenis->result() as $jenis) {
                                                         $harga=number_format($jenis->harga,2,",",".");
-                                                        echo "<option value='".$jenis->id_jenis."'>".$jenis->nama_jenis." - Min Luas : ".$jenis->ukuran."/m2 - Harga : ".$harga." /bulan</option>";
+                                                        echo "<option myMin=".$jenis->ukuran." myMax=".$jenis->ukuran_max." value='".$jenis->id_jenis."'>".$jenis->nama_jenis." - Min Luas : ".$jenis->ukuran."/m2 - Harga : ".$harga." /bulan</option>";
                                                     }
                                                     echo '</select>';
                                                     ?>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Luas Iklan /m<sup>2</sup><small> (required)</small></label>
-                                                    <div class="input-group">
-                                                        <input class="form-control" value="" placeholder="Panjang X Lebar" name="luas" type="text">
+                                                    <div class="input-group sm-2">
+                                                        <input id="luas" min ="" max="" class="form-control" value="" placeholder="Panjang X Lebar" name="luas" type="text" required>
                                                         <span class="input-group-addon">m<sup>2</sup></span>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="lama_iklan">Lama Iklan :</label>
+                                                        <select id="bulanTahun" name="bulanTahun" class="form-control" required>
+                                                            <option value="">-Pilih Bulan / Tahun-</option>
+                                                            <option value="bulan">Bulan</option>
+                                                            <option value="tahun">Tahun</option>
+                                                        </select>
                                                     <div class="input-group sm-2">
-                                                        <input class="form-control" value="" placeholder="Lama Pemasangan /Bulan" name="lama_iklan" type="text">
-                                                        <span class="input-group-addon">Bulan</span>
+                                                        <input id="inputBulanTahun" class="form-control" value="" placeholder="Lama Pemasangan /Bulan" name="lama_iklan" type="number">
+                                                        <span id="spanBulanTahun" class="input-group-addon"></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -87,8 +93,8 @@
                                                     ?>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="lokasi">KM+Meter<small>(required)</small></label>
-                                                    <input class="form-control" value="" placeholder="KM 120+100" name="lokasi" type="text">
+                                                    <label for="lokasi">KM<small>(required)</small></label>
+                                                    <input class="form-control" value="" placeholder="KM" name="lokasi" type="text">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="kordinat">Kordinat<small>(required)</small></label>
@@ -146,4 +152,24 @@
             </div>
         </div>
 
-        
+<script type="text/javascript" charset="utf-8" async defer>
+    $(document).ready(function(){
+        $('#id_jenis').change(function() {
+            var optMax = $('option:selected', this).attr('myMax');
+            var optMin = $('option:selected', this).attr('myMin');
+            $('#luas').attr({
+                min: optMin,
+                max: optMax,
+                placeholder: "Minimal : "+optMin+", Maximal : "+optMax
+            });
+        });
+
+        $('#bulanTahun').change(function() {
+            var opt = $('option:selected', this).val();
+            $('#spanBulanTahun').text(opt)
+            $('#inputBulanTahun').attr({
+                placeholder: "Lama pemasangan /"+opt
+            });
+        });
+    });
+</script>

@@ -17,8 +17,12 @@
                                 echo '<input type="text" name="nama_jenis" value="'.$jenis->nama_jenis.'" class="form-control">';
                                 echo '</div>';
                                 echo '<div class="form-group">';
-                                echo '<label for="ukuran">Ukuran</label>';
+                                echo '<label for="ukuran">Ukuran Min</label>';
                                 echo '<input type="text" name="ukuran" value="'.$jenis->ukuran.'" class="form-control">';
+                                echo '</div>';
+                                echo '<div class="form-group">';
+                                echo '<label for="ukuran_max">Ukuran Max</label>';
+                                echo '<input type="text" name="ukuran_max" value="'.$jenis->ukuran_max.'" class="form-control">';
                                 echo '</div>';
                                 echo '<div class="form-group">';
                                 echo '<label for="harga">Harga</label>';

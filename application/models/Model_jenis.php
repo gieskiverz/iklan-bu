@@ -4,8 +4,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Model_jenis extends CI_Model {
 
 	public function create(){
-		$data = array('nama_jenis' => $this->input->post('nama_jenis'),
-			'id_tipe'=>$this->input->post('id_tipe'),'ukuran'=>$this->input->post('ukuran'),'harga'=>$this->input->post('harga'));
+		$data = array(
+			'nama_jenis' => $this->input->post('nama_jenis'),
+			'id_tipe'=>$this->input->post('id_tipe'),
+			'ukuran'=>$this->input->post('ukuran'),
+			'ukuran_max'=>$this->input->post('ukuran_max'),
+			'harga'=>$this->input->post('harga'));
 		$query = $this->db->insert('jenis_iklan', $data);
 		return $query;
 	}
@@ -19,8 +23,12 @@ class Model_jenis extends CI_Model {
 		return $query;
 	}
 	public function update(){
-		$data = array('nama_jenis'=>$this->input->post('nama_jenis'),
-			'id_tipe'=>$this->input->post('id_tipe'),'ukuran'=>$this->input->post('ukuran'),'harga'=>$this->input->post('harga'));
+		$data = array(
+			'nama_jenis'=>$this->input->post('nama_jenis'),
+			'id_tipe'=>$this->input->post('id_tipe'),
+			'ukuran'=>$this->input->post('ukuran'),
+			'ukuran_max'=>$this->input->post('ukuran_max'),
+			'harga'=>$this->input->post('harga'));
 		$this->db->where('id_jenis', $this->input->post('id_jenis'));//mengupdate berdasarkan id_jalan
 		$query = $this->db->update('jenis_iklan', $data);
 		return $query;

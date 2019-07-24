@@ -12,7 +12,7 @@
                         <label for="nama_jenis">Nama Jenis Iklan</label>
                         <input type="text" name="nama_jenis" class="form-control" placeholder="Jenis Iklan">
                     </div>
-                    <!-- <div class="form-group">
+                    <div class="form-group">
                         <label for="datatipe">Materi Tipe</label>
                         <?php if ($itemtipe->num_rows()!=null) {
                             echo '<select name="id_tipe" id="id_tipe" class="form-control">';
@@ -24,10 +24,14 @@
                         }else{
                             echo anchor('admin/tipe_iklan', '<span class="glyphicon glyphicon-plus"></span> Tambah Data iklan', 'class="btn btn-info form-control"');
                         } ?>
-                    </div> -->
+                    </div>
                      <div class="form-group">
                         <label for="ukuran">Luas Iklan Minimal(m2)</label>
-                        <input type="text" name="ukuran" class="form-control" placeholder="Panjang X Lebar">
+                        <input type="number" name="ukuran" class="form-control" placeholder="Panjang X Lebar">
+                    </div>
+                     <div class="form-group">
+                        <label for="ukuran">Luas Iklan Maximal(m2)</label>
+                        <input type="number" name="ukuran_max" class="form-control" placeholder="Panjang X Lebar">
                     </div>
                     <div class="form-group">
                         <label for="harga">Harga (Rp/m2)</label>
@@ -46,6 +50,7 @@
                             <th style="background:#5d5a56;color:#fff">No</th>
                             <th style="background:#5d5a56;color:#fff">Jenis Iklan</th>
                             <th style="background:#5d5a56;color:#fff">Luas Iklan Minimal(m2)</th>
+                            <th style="background:#5d5a56;color:#fff">Luas Iklan Maximal(m2)</th>
                             <th style="background:#5d5a56;color:#fff">Harga (Rp/m2)</th>
                             <th style="background:#5d5a56;color:#fff">Aksi</th>
                         </tr>
@@ -58,6 +63,7 @@
                         echo "<td>".$no++."</td>";
                         echo "<td>".$jenis->nama_jenis."</td>";
                         echo "<td>".$jenis->ukuran."</td>";
+                        echo "<td>".$jenis->ukuran_max."</td>";
                         $harga=number_format($jenis->harga,2,",",".");
                         echo "<td align='right'>".$harga."</td>";
                         echo "<td align='center'><a href='".site_url('jenis_iklan/editjenis')."/".$jenis->id_jenis."'><button class='btn btn-primary'><i class='fas fa-edit'></i></button></a>  ";

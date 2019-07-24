@@ -94,7 +94,7 @@
 
     <script src="<?= base_url('assets/'); ?>vendorHome/js/modernizr-2.6.2.min.js"></script>
 
-    <script src="<?= base_url('assets/'); ?>vendorHome/js/jquery-1.10.2.min.js"></script>
+    
     <script src="<?= base_url('assets/'); ?>vendorHome/bootstrap/js/bootstrap.min.js"></script>
     <script src="<?= base_url('assets/'); ?>vendorHome/js/bootstrap-select.min.js"></script>
     <script src="<?= base_url('assets/'); ?>vendorHome/js/bootstrap-hover-dropdown.js"></script>
