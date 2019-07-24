@@ -269,41 +269,46 @@ class M_tujuan extends CI_Model
 		$dKriteria=$this->mod_kriteria->kriteria_data();
 		if($this->m_db->is_bof('tujuan',$s)==FALSE)
 		{
-			$dPeserta=$this->m_db->get_data('peserta',$s);
+			$dPeserta=$this->m_db->get_data('daftar_tujuan',["tujuan_id" => $tujuanID]);
 			if(!empty($dPeserta))
 			{
 				
 				foreach($dPeserta as $rPeserta)
 				{
-					$pesertaID=$rPeserta->peserta_id;
-					$siswaID=$rPeserta->siswa_id;
-					$NISN=field_value('siswa','siswa_id',$siswaID,'nisn');
-					$nama=field_value('siswa','siswa_id',$siswaID,'nama');			
+					$daftar_tujuan_id=$rPeserta->daftar_tujuan_id;
+					$jalan_id=$rPeserta->jalan_id;
+					$nama=field_value('jalan','id_jalan',$jalan_id,'namajalan');			
 					if(!empty($dKriteria))
 					{
-						$total=0;
+						$total = 0;
 						foreach($dKriteria as $rKriteria)
 						{						
 							$kriteriaid=$rKriteria->kriteria_id;
-							$subkriteria=peserta_nilai($pesertaID,$kriteriaid);
+							$subkriteria=peserta_nilai($daftar_tujuan_id,$kriteriaid);
 							$nilaiID=field_value('subkriteria','subkriteria_id',$subkriteria,'nilai_id');
 							$nilai=field_value('nilai_kategori','nilai_id',$nilaiID,'nama_nilai');
-							$prioritas=ambil_prioritas($tujuanID,$subkriteria);
-							$total+=$prioritas;							
-						}						
+							$ambil_prioritas = $this->db->get_where('subkriteria_hasil', 
+							['tujuan_id' => $tujuanID, 'subkriteria_id' => $subkriteria])->row();
+							if ($ambil_prioritas) {
+								$prioritas= $ambil_prioritas->prioritas;
+							}else{
+								$prioritas = 0;
+							}
+							$total+=$prioritas;					
+						}	
 					}
 					
 					$shasil=array(
-					'peserta_id'=>$pesertaID,
-					'id_tujuan'=>$tujuanID,
+					'daftar_tujuan_id'=>$daftar_tujuan_id,
+					'tujuan_id'=>$tujuanID,
 					);
 					$dhasil=array(
 					'total'=>$total,
 					);
-					$this->m_db->edit_row('peserta',$dhasil,$shasil);
+					$this->m_db->edit_row('daftar_tujuan',$dhasil,$shasil);
 					$kuota=$this->tujuan_info($tujuanID,'kuota');
 			
-					$dPH=$this->m_db->get_data('peserta',$s,'total DESC');
+					$dPH=$this->m_db->get_data('daftar_tujuan',["tujuan_id" => $tujuanID],'total DESC');
 					$rank=0;
 					foreach($dPH as $rPH)
 					{
@@ -319,7 +324,7 @@ class M_tujuan extends CI_Model
 							'status'=>'tidak lolos',
 							);
 						}
-						$this->m_db->edit_row('peserta',$d,array('peserta_id'=>$rPH->peserta_id));
+						$this->m_db->edit_row('daftar_tujuan',$d,array('daftar_tujuan_id'=>$rPH->daftar_tujuan_id));
 					}
 					
 					return true;

@@ -85,7 +85,7 @@ $("#prioform").submit(function(e){
 	$.ajax({
 		type:'post',
 		dataType:'json',
-		url:"<?=base_url();?>/beasiswa/kriteria/updatesubprioritas",
+		url:"<?=base_url();?>ahp/updatesubprioritas",
 		data:$(this).serialize(),
 		error:function(){
 			
@@ -423,7 +423,7 @@ echo form_close();
 	?>	
 </tbody>
 </table>
-<?php echo '<button type="submit" class="btn btn-success" style="display:none;">Simpan Prioritas</button>';
+<?php echo '<button type="submit" class="btn btn-success" >Simpan Prioritas</button>';
 echo form_close();
 ?>
 </div>

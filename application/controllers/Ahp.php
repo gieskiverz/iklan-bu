@@ -464,7 +464,6 @@ class Ahp extends CI_Controller {
     { 
        
         $this->form_validation->set_rules('tujuan','Tujuan','required');
-		$this->form_validation->set_rules('ruas','Ruas','required');
 		if($this->form_validation->run()==TRUE)
 		{
             $data= [
@@ -487,7 +486,6 @@ class Ahp extends CI_Controller {
                    $insertNilai = $this->Daftar_tujuan_model->insertNilai($data_nilai);
                 }    
             }
-            
 			if($insertNilai)
 			{
 				$this->session->set_flashdata("pesan", "<div class=\"col-md-12\"><div class=\"alert alert-success\">Data Berhasil Ditambahkan </div></div>");
@@ -639,7 +637,7 @@ class Ahp extends CI_Controller {
 		
     	$msg="";
     	$s=array(
-    	'kriteria_nilai_id !='=>''
+    	'tujuan_id '=> $this->input->post('tujuan_id')
     	);
     	$this->m_db->delete_row('kriteria_nilai',$s);
     	    	
@@ -758,6 +756,40 @@ class Ahp extends CI_Controller {
         $this->load->view('element/admin_topbar', $data);
         $this->load->view('admin/hirarki/v_kandidat', $data);
         $this->load->view('element/admin_footer');
+    }
+    
+    function updatesubprioritas()
+	{
+		$tujuan_id=$this->input->post('tujuan_id');
+    	$kriteriaid=$this->input->post('kriteriaid');
+    	$prio=$this->input->post('prio');
+    	if(!empty($prio))
+    	{
+			foreach($prio as $rk=>$rv)
+			{
+				$s=array(
+				'tujuan_id'=>$tujuan_id,
+				'subkriteria_id'=>$rk,
+				);
+				if($this->m_db->is_bof('subkriteria_hasil',$s)==TRUE)
+				{
+					$d=array(
+					'tujuan_id'=>$tujuan_id,
+					'subkriteria_id'=>$rk,
+					'prioritas'=>$rv,
+					);
+					$this->m_db->add_row('subkriteria_hasil',$d);
+				}else{
+					$d=array(					
+					'prioritas'=>$rv,
+					);
+					$this->m_db->edit_row('subkriteria_hasil',$d,$s);
+				}
+			}
+			echo json_encode('ok');
+		}else{
+			echo json_encode('no');
+		}
     }
     
     // function proseshitung()

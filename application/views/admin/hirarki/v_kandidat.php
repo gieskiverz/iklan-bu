@@ -1,3 +1,44 @@
+
+<?php
+if(empty($data))
+{
+	redirect(base_url('ahp'));
+}
+foreach($data as $row){	
+}
+$tujuan_id=$row->tujuan_id;
+$tujuanId=$tujuan_id;
+?>
+<script type="text/javascript">
+function proseshitung()
+{
+	$.ajax({
+		type:'get',
+		dataType:'json',
+		url:"<?=base_url('ahp/proseshitung');?>",
+		data:"id=<?=$tujuan_id;?>",
+		error:function(){
+			$("#respon").html('Proses hitung seleksi beasiswa gagal');
+			$("#error").show();
+		},
+		beforeSend:function(){
+			$("#error").hide();
+			$("#respon").html("Sedang bekerja, tunggu sebentar");
+		},
+		success:function(x){
+			if(x.status=="ok")
+			{
+				alert('Proses seleksi berhasil. Halaman akan direfresh');
+				window.location=window.location;
+			}else{
+				$("#respon").html('Proses hitung seleksi beasiswa gagal');
+				$("#error").show();
+			}
+		},
+	});
+}
+</script>
+
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
@@ -5,8 +46,16 @@
 	<h1 class="h3 mb-4 text-gray-800"><?= $judul; ?></h1>
 
 	<br><?php echo $this->session->flashdata('pesan');?>
-	
 	<p>&nbsp;</p>
+	<?php
+		$sql="Select COUNT(*) as m FROM daftar_tujuan Where tujuan_id='$tujuan_id' AND status IN ('lolos','tidaklolos')";
+		$c=$this->m_db->get_query_row($sql,'m');
+		if($c < 1)
+		{
+			echo '<div class="alert alert-warning hidden-print" id="error">'.$judul.' belum diproses. Klik <a href="javascript:;" onclick="proseshitung();">di sini</a> untuk proses</div>';
+		}else{	
+	?>
+	<a href="javascript:;" onclick="proseshitung();" class="btn btn-primary btn-md">Ulangi Proses Hitung</a>
 	<table class="table table-border table-hover" id="datatable">
 		<thead>
 			<th>Judul</th>
@@ -32,9 +81,9 @@ if($this->m_db->is_bof('tujuan',$s)==FALSE)
 	$dtujuan=$this->m_db->get_data('daftar_tujuan',["tujuan_id" => $tujuan_id]);
 	if(!empty($dtujuan))
 	{
-		
 		foreach($dtujuan as $rtujuan)
 		{
+
 			$jalanId=$rtujuan->jalan_id;
 			$nama=field_value('jalan','id_jalan',$jalanId,'namajalan');
 			
@@ -48,13 +97,12 @@ if($this->m_db->is_bof('tujuan',$s)==FALSE)
 					foreach($dKriteria as $rKriteria)
 					{						
 						$kriteriaid=$rKriteria->kriteria_id;
-						$subkriteria = $this->db->get_where('daftar_tujuan_nilai', ['daftar_tujuan_id' => $rtujuan->daftar_tujuan_id, 
-						"kriteria_id" => $kriteriaid])->row();
-						$nilaiID = $subkriteria->nilai_id;
-						// $nilai=field_value('kriteria_nilai','kriteria_nilai_id',$nilaiID,'nama_nilai');
+						$subkriteria=peserta_nilai($jalanId,$kriteriaid);
 						$prioritas=ambil_prioritas($tujuan_id,$subkriteria);
-						$total+=$prioritas;
-						echo '<td>'.$nilaiID.'</td>';
+
+
+						$total += $prioritas;
+						echo '<td>'.number_format($prioritas,2).'</td>';
 					}
 				}
 				?>
@@ -75,6 +123,9 @@ if($this->m_db->is_bof('tujuan',$s)==FALSE)
 ?>
 	</table>
 
+<?php
+}
+?>
 </div>
 <!-- ./container-fluid -->
 

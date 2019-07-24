@@ -152,12 +152,12 @@ if(!function_exists('peserta_nilai'))
 
 if(!function_exists('ambil_prioritas'))
 {
-	function ambil_prioritas($beasiswaID,$subkriteriaID)
+	function ambil_prioritas($tujuanID,$subkriteriaID)
 	{
 		$CI=& get_instance();
 		$CI->load->library('m_db');
 		$s=array(
-		'beasiswa_id'=>$beasiswaID,
+		'tujuan_id'=>$tujuanID,
 		'subkriteria_id'=>$subkriteriaID,
 		);
 		$item=$CI->m_db->get_row('subkriteria_hasil',$s,'prioritas');
