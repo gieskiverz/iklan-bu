@@ -35,6 +35,7 @@
 
     <!-- Tambahan Daftar -->
     <link rel="stylesheet" href="<?= base_url('assets/'); ?>vendorHome/css/wizard.css">
+    <script src="<?= base_url('assets/'); ?>vendorHome/js/jquery-1.10.2.min.js"></script>
 
 </head>
 
