@@ -67,7 +67,7 @@
 					<td><?=$row->tahun;?></td>
 					<td><?=$row->kuota;?></td>
 					<td>
-						<a href="" class="btn btn-xs btn-success">Kandidat</a> 
+						<a href="<?php echo site_url('ahp/kandidat/'.$row->id_tujuan);?>" class="btn btn-xs btn-success">Kandidat</a> 
 						<a title="Edit Kriteria" href="<?php echo site_url('ahp/editTujuan/'.$row->id_tujuan);?>" class="btn btn-xs btn-info"><i class="fa fa-edit"></i> Edit</a>
 						<a onclick="return confirm('Yakin ingin menghapus?');" href="<?php echo site_url('ahp/delete/'.$row->id_tujuan);?>" class="btn btn-xs btn-danger">Delete</a>
 					</td>

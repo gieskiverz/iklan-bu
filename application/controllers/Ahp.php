@@ -741,4 +741,38 @@ class Ahp extends CI_Controller {
 		}
 		
 	}
+
+    function kandidat($id)
+    {
+        // $id=$this->input->get('id');
+        $nama=$this->mod_bea->tujuan_info($id,'judul');
+        $data=array(
+            'title'=>'Admin Panel',
+            'judul'=>'Daftar Kandidat '.$nama,
+        );
+        $data['tujuan_id'] = $id;
+        $data['admin'] = $this->db->get_where('admin', ['email' => $this->session->userdata('email')])->row_array();
+        $data['data']=$this->Daftar_tujuan_model->getAllBy(array('tujuan_id'=>$id));
+        $this->load->view('element/admin_header', $data);
+        $this->load->view('element/admin_sidebar', $data);
+        $this->load->view('element/admin_topbar', $data);
+        $this->load->view('admin/hirarki/v_kandidat', $data);
+        $this->load->view('element/admin_footer');
+    }
+    
+    // function proseshitung()
+    // {
+    //     $id=$this->input->get('id');
+    //     $this->mod_bea->proseshitung($id);      
+    //     if($this->mod_bea->proseshitung($id)==TRUE)
+    //     {
+    //         //set_header_message('success','Proses Beasiswa','Beasiswa telah diproses');
+    //         //redirect(base_url(akses().'/beasiswa/beasiswa').'?id='.$id);
+    //         echo json_encode(array('status'=>'ok'));
+    //     }else{
+    //         //set_header_message('danger','Proses Beasiswa','Beasiswa gagal diproses');
+    //         //redirect(base_url(akses().'/beasiswa/beasiswa'));
+    //         echo json_encode(array('status'=>'no'));
+    //     }       
+    // }
 }

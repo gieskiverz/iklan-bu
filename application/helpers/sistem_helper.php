@@ -142,10 +142,10 @@ if(!function_exists('peserta_nilai'))
 		$CI=& get_instance();
 		$CI->load->library('m_db');
 		$s=array(
-		'peserta_id'=>$pesertaID,
+		'daftar_tujuan_id'=>$pesertaID,
 		'kriteria_id'=>$kriteriaID,
 		);
-		$item=$CI->m_db->get_row('peserta_nilai',$s,'nilai_id');
+		$item=$CI->m_db->get_row('daftar_tujuan_nilai',$s,'nilai_id');
 		return $item;
 	}
 }
