@@ -31,15 +31,8 @@ $(document).ready(function () {
     echo form_open(base_url('ahp/proseseditsubKriteria?kriteria=').$data->kriteria_id,array('class'=>'form-horizontal'));
     ?>  
         <input type="hidden" name="subkriteria_id" value="<?php echo $data->subkriteria_id ?>" >
-        <div class="form-group required">
-            <label class="col-sm-2 control-label" for="">Tipe</label>
-            <div class="col-md-6">
-                <input type="radio" <?php if($data->tipe=="teks"){echo "checked";} ?> value="teks" name="tipe" class="tipe">teks
-                <input type="radio" <?php if($data->tipe=="nilai"){echo "checked";} ?> value="nilai" name="tipe" class="tipe">nilai
-
-            </div>
-        </div>
-        <div id="div_teks" class="opsi" <?php if($data->tipe=="nilai"){echo "style='display: none;'";} ?> >
+    
+        <div id="div_teks" class="opsi" >
             <div class="form-group required">
                 <label class="col-sm-2 control-label" for="">Keterangan</label>
                 <div class="col-md-7">
@@ -48,7 +41,7 @@ $(document).ready(function () {
             </div>	
         </div>
 
-        <div id="div_nilai" class="opsi" <?php if($data->tipe=="teks"){echo "style='display: none;'";} ?>>
+        <div id="div_nilai" class="opsi">
             <div class="form-group required">
                 <label class="col-sm-2 control-label" for="">Minimum</label>
                 <div class="col-md-10">

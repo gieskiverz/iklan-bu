@@ -30,25 +30,8 @@ $(document).ready(function () {
     echo validation_errors();
     echo form_open(base_url('ahp/prosestambahsubKriteria?kriteria=').$kriteria,array('class'=>'form-horizontal'));
     ?>  
-        <div class="form-group required">
-            <label class="col-sm-2 control-label" for="">Tipe</label>
-            <div class="col-md-6">
-                <?php
-                $tipe=array('teks','nilai');
-                echo com_choice('radio','tipe',$tipe,'teks',array('class'=>'tipe '),TRUE,TRUE);
-                ?>
-            </div>
-        </div>
-        <div id="div_teks" class="opsi">
-            <div class="form-group required">
-                <label class="col-sm-2 control-label" for="">Keterangan</label>
-                <div class="col-md-7">
-                    <input type="text" name="ket" id="" class="form-control " autocomplete="" placeholder="keterangan" required="" value="<?php echo set_value('ket'); ?>"/>
-                </div>
-            </div>	
-        </div>
 
-        <div id="div_nilai" class="opsi" style="display: none;">
+        <div id="div_nilai" class="opsi" >
             <div class="form-group required">
                 <label class="col-sm-2 control-label" for="">Minimum</label>
                 <div class="col-md-10">
