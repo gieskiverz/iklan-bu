@@ -52,6 +52,7 @@
                             <th style="background:#5d5a56;color:#fff">Luas Iklan Minimal(m2)</th>
                             <th style="background:#5d5a56;color:#fff">Luas Iklan Maximal(m2)</th>
                             <th style="background:#5d5a56;color:#fff">Harga (Rp/m2)</th>
+                            <th width="28%" style="background:#5d5a56;color:#fff">Range Harga</th>
                             <th style="background:#5d5a56;color:#fff">Aksi</th>
                         </tr>
                     </thead>
@@ -66,6 +67,7 @@
                         echo "<td>".$jenis->ukuran_max."</td>";
                         $harga=number_format($jenis->harga,2,",",".");
                         echo "<td align='right'>".$harga."</td>";
+                        echo "<td align='right'>".number_format($jenis->ukuran*$jenis->harga,2,",",".")." - ".number_format($jenis->ukuran_max*$jenis->harga,2,",",".")."</td>";
                         echo "<td align='center'><a href='".site_url('jenis_iklan/editjenis')."/".$jenis->id_jenis."'><button class='btn btn-primary'><i class='fas fa-edit'></i></button></a>  ";
                         echo " <a href='".site_url('jenis_iklan/deletejenis')."/".$jenis->id_jenis."'><button class='btn btn-danger'><i class='fas fa-trash-alt'></button></a></td>";
                         echo "</tr>";

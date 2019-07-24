@@ -65,7 +65,16 @@ class User extends CI_Controller{
 	    {
 	    $datax = $this->upload->data();             
  
-        $filename = $datax['file_name'];
+		$filename = $datax['file_name'];
+		
+		if ($this->input->post('bulanTahun') == 'tahun') {
+			$lama_iklan = 12*$this->input->post('lama_iklan');
+		}else{
+			$lama_iklan = $this->input->post('lama_iklan');
+		}
+		$harga_iklan = $this->db->get_where("jenis_iklan",["id_jenis" => $this->input->post('jenis_iklan')])->row();
+		$harga = $harga_iklan->harga;
+		$biaya = $lama_iklan * $harga * $this->input->post('luas');
 	    $data = array (
            
             'email' => $this->session->userdata('email'),
@@ -74,10 +83,11 @@ class User extends CI_Controller{
 			'luas' => $this->input->post('luas'),
 			'lokasi' => $this->input->post('lokasi'),
 			'kordinat' => $this->input->post('kordinat'),
+			'biaya' => $biaya,
             // 'foto' => $this->input->post('foto'),
             'proposal' => $filename,
             'tgl_pengajuan'=>date("Y-m-d"),
-            'lama_iklan'=>$this->input->post('lama_iklan')
+            'lama_iklan'=>$lama_iklan
         );
         
         $this->modelapp->insertData('submit_iklan',$data); //akses model untuk menyimpan ke database   
