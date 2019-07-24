@@ -31,7 +31,7 @@ $(document).ready(function () {
     echo form_open(base_url('ahp/proseseditsubKriteria?kriteria=').$data->kriteria_id,array('class'=>'form-horizontal'));
     ?>  
         <input type="hidden" name="subkriteria_id" value="<?php echo $data->subkriteria_id ?>" >
-    
+        <input type="hidden" name="tipe" value="nilai">
         <div id="div_teks" class="opsi" >
             <div class="form-group required">
                 <label class="col-sm-2 control-label" for="">Keterangan</label>

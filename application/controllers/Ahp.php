@@ -271,19 +271,7 @@ class Ahp extends CI_Controller {
 				redirect(base_url('ahp/addSubKriteria').$link);
 			}
 		}else{
-			$kriteria=$this->input->get('kriteria');
-			$link=$kriteria?"?kriteria=".$kriteria:"";
-			$nama=field_value('kriteria','kriteria_id',$kriteria,'nama_kriteria');
-			$meta['judul']="Tambah Parameter ".$nama;
-            $this->load->view('element/admin_header', $meta);
-            $this->load->view('element/admin_sidebar', $data,$d,$link);
-		    $this->load->view('element/admin_topbar', $data,$d,$link);
-	        $d['utama']=$this->mod_kriteria->kriteria_data();
-	        $d['nilai']=$this->m_db->get_data('nilai_kategori');
-	        $d['kriteria']=$kriteria;
-	        $d['link']=$link;
-            $this->load->view('admin/hirarki/v_addSubKriteria', $data,$d,$link);
-		    $this->load->view('element/admin_footer');
+            redirect(base_url('ahp/addSubKriteria'));
 		}
 	}
 

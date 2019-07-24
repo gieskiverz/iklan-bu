@@ -30,6 +30,7 @@ $(document).ready(function () {
     echo validation_errors();
     echo form_open(base_url('ahp/prosestambahsubKriteria?kriteria=').$kriteria,array('class'=>'form-horizontal'));
     ?>  
+    <input type="hidden" name="tipe" value="nilai">
 
         <div id="div_nilai" class="opsi" >
             <div class="form-group required">
